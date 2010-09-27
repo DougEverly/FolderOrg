@@ -2,7 +2,7 @@
 
 FolderOrg 1.2
 
-   Copyright 2010 Doug Everly Doug@Everly.org
+   Copyright 2002-2010 Doug Everly Doug@Everly.org
    
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

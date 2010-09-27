@@ -1,0 +1,13 @@
+Read Me contents here.
+
+How to compile FolderOrg.
+
+The Unix Way
+make
+
+The Command Line Way
+osacompile -o FolderOrg.app FolderOrg.applescript
+
+
+The Mac Way
+Open with AppleScript Editor and save as Application.
