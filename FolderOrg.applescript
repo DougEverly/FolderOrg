@@ -1,6 +1,6 @@
 (*
 
-FolderOrg 1.2
+FolderOrg 1.2.x
 
    Copyright 2002-2010 Doug Everly Doug@Everly.org
    
@@ -16,7 +16,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
    limitations under the License.
 
-
+2010 September - ignore_suffix and getSuffix lbutler@covisp.net
 *)
 
 property open_folder : true
@@ -25,6 +25,8 @@ property time_fmt : 1
 property bring_to_front : true
 property organized_folder : ""
 property ignore_kinds : {"Safari download", "Finder Document"}
+-- Add suffixes to ignore. don't include the '.' (lbutler@covisp.net)
+property ignore_suffix : {"nzb", "torent"}
 property date_fmt : "+%Y-%m-%d" -- BE VERY CAREFUL HERE! This string is execute in the UNIX shell. The wrong command string could be bad.
 
 
@@ -66,6 +68,17 @@ on set_organized_folder()
 	
 end set_organized_folder
 
+(* getSuffix contributed by lbutler@covisp.net *)
+on getSuffix(myFile)
+	tell application "Finder" to set myFile to name of myFile
+	if myFile contains "." then
+		set oldDelims to AppleScript's text item delimiters
+		set AppleScript's text item delimiters to "."
+		set theSuffix to last text item of myFile
+		set AppleScript's text item delimiters to oldDelims
+		return theSuffix
+	end if
+end getSuffix
 
 
 on adding folder items to this_folder after receiving added_items
@@ -78,8 +91,10 @@ on adding folder items to this_folder after receiving added_items
 		set this_item to item i of added_items
 		--display dialog the kind of (info for this_item) as string
 		set item_kind to the kind of (info for this_item) as string
-		if (item_kind is in ignore_kinds) then
-			-- display dialog item_kind & " is being ignored"
+		set item_suffix to getSuffix(this_item as text)
+		
+		if (item_kind is in ignore_kinds) or (item_suffix is in ignore_suffix) then
+			display dialog item_kind & " or " & item_suffix & " is being ignored"
 		else
 			
 			set item_name to the name of (info for this_item)
